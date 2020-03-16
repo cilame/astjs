@@ -29,9 +29,9 @@ var study = {
     'ObjectExpression': 'ObjectExpression',
     'AssignmentExpression': 'AssignmentExpression',
     'ExpressionStatement': 'ExpressionStatement',
+    'ArrayPattern': 'ArrayPattern',
 
     // 下面这一块是目前还没有过的部分
-    'ArrayPattern': 'ArrayPattern',
     'AssignmentPattern': 'AssignmentPattern',
     'ArrowFunctionExpression': 'ArrowFunctionExpression',
     'AwaitExpression': 'AwaitExpression',
@@ -82,9 +82,8 @@ var esprima = require('esprima');
 var escodegen = require('escodegen')
 
 var script = `
-var s = 1+1;
-s = 123+333;
-
+var a,b;
+a = 1,b = 2;
 `
 var tree = esprima.parse(script); //JSON.stringify();
 
@@ -104,6 +103,7 @@ function traverse_tree(tree){
         // 重点捕捉对象
         // get_sequence_finger(tree)                // 捕捉序列表达式
         // get_assign_finger(tree)                  // 捕捉赋值语句
+        // get_array_pattern_finger(tree)           // 捕捉多参赋值 [a,b] = [1,2]
         // get_vardecl_finger(tree)                 // 捕捉参数组的定义，“一行”的参数定义
         // get_var_finger(tree)                     // 捕捉参数定义（包含赋值）
         // get_expression_finger(tree)              // 获取表达式，“一行”的函数执行
@@ -160,8 +160,56 @@ traverse_tree(tree)
 
 
 
+function get_empty_finger(node){
+    if(node.type == 'EmptyStatement'){
+        print(node)
+    }
+}
+
+function get_empty_finger(node){
+    if(node.type == 'EmptyStatement'){
+        print(node)
+    }
+}
+
+function get_empty_finger(node){
+    if(node.type == 'EmptyStatement'){
+        print(node)
+    }
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function get_array_pattern_finger(node){
+    if(node.type == 'ArrayPattern'){
+        // 就是多参赋值的“多参”，注意这个参数通常只能在 AssignmentExpression 的 left 属性里面。
+        // 
+        // type: 'ArrayPattern',
+        // elements:
+        //  [ Identifier { type: 'Identifier', name: 'a' },
+        //    Identifier { type: 'Identifier', name: 'b' } ] }
+        print(node)
+    }
+}
 
 function get_empty_finger(node){
     if(node.type == 'EmptyStatement'){
