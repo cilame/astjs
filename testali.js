@@ -72,17 +72,17 @@ print(script)
 
 
 
-// function conbine_flat_sequence(tree) {
-//     estraverse.replace(tree, {
-//         enter(node, parent){
-//             if (node.type === 'ExpressionStatement'){
-//                 if (node.expression.type === 'SequenceExpression'){
-//                     return node
-//                 }
-//             }
-//         }
-//     });
-// }
+function conbine_flat_sequence(tree) {
+    estraverse.replace(tree, {
+        enter(node, parent){
+            if (node.type === 'ExpressionStatement'){
+                if (node.expression.type === 'SequenceExpression'){
+                    return node
+                }
+            }
+        }
+    });
+}
 
 
 
