@@ -27,34 +27,71 @@ var s = {
         return a+b;
     }
 };
-print(s['cccc'](s['aaaa'],s['bbbb']))
+s['123'] = 123;
+print(s['cccc'](s['aaaa'],s['bbbb']) + s['123'])
+`
+
+var code = `
+function s1(a,b){
+    return a+b
+}
+function s2(a,b){
+    return a*b
+}
+s2(s1(1,3), s1(2,4))
 `
 
 var tree = esprima.parseScript(code)
-// show(tree);
-conbine_static_array(tree);
-conbine_object_array(tree);
-conbine_identy_function(tree);
-conbine_binary_function(tree);
-conbine_binary(tree);
+show(tree)
+combine_static_array(tree);
+combine_object_array(tree);
+combine_identy_function(tree);
+combine_binary_function(tree);
+combine_binary(tree);
 var script = escodegen.generate(tree);
-print(script)
+print(script);
+
+function muti_process_defusion(code){
+    var tree = esprima.parseScript(code)
+    combine_static_array(tree);
+    combine_object_array(tree);
+    combine_identy_function(tree);
+    combine_binary_function(tree);
+    combine_binary(tree);
+    return escodegen.generate(tree);
+}
+
+
+
 
 
 
 
 // 合并对象的静态列表(这里后续需要考虑考虑重名的处理)
-function conbine_object_array(tree) {
-    var STATIC_OBJECT = {}
+function combine_object_array(tree) {
+    var STATIC_OBJECT = {};
     estraverse.replace(tree, {
         leave(node, parent) {
+            // 初始化
             if (node.type === 'VariableDeclarator' &&
+                node.init != null &&
                 node.init.type === 'ObjectExpression'){
                 STATIC_OBJECT[node.id.name] = {}
                 for(var key in node.init.properties){
                     STATIC_OBJECT[node.id.name][node.init.properties[key].key.value] = node.init.properties[key].value
                 }
             }
+            // 赋值
+            if (node.type === 'AssignmentExpression' &&
+                node.left.type === 'MemberExpression' &&
+                node.left.computed === true &&
+                node.left.object.type === 'Identifier' &&
+                node.left.object.name in STATIC_OBJECT &&
+                node.right.type === 'Literal' &&
+                typeof node.left.property.value !== 'number'){
+                STATIC_OBJECT[node.left.object.name][node.left.property.value] = node.right
+            }
+            // 替换
             if (node.type === 'MemberExpression' &&
                 node.object.type === 'Identifier' &&
                 node.property.type === 'Literal' &&
@@ -66,15 +103,28 @@ function conbine_object_array(tree) {
 }
 
 // 合并参数的静态列表(这里后续需要考虑考虑重名的处理)
-function conbine_static_array(tree) {
-    var STATIC_ARRAY = {}
+function combine_static_array(tree) {
+    var STATIC_ARRAY = {};
     estraverse.replace(tree, {
         leave(node, parent) {
+            // 初始化
             if (node.type === 'VariableDeclarator' &&
+                node.init != null &&
                 node.init.type === 'ArrayExpression' &&
                 node.id.type === 'Identifier'){
                 STATIC_ARRAY[node.id.name] = node.init.elements
             }
+            // 赋值
+            if (node.type === 'AssignmentExpression' &&
+                node.left.type === 'MemberExpression' &&
+                node.left.computed === true &&
+                node.left.object.type === 'Identifier' &&
+                node.left.object.name in STATIC_ARRAY &&
+                node.right.type === 'Literal' &&
+                typeof node.left.property.value === 'number'){
+                STATIC_ARRAY[node.left.object.name][node.left.property.value] = node.right
+            }
+            // 替换
             if (node.type === 'MemberExpression' &&
                 node.object.type === 'Identifier' &&
                 node.property.type === 'Literal' &&
@@ -86,9 +136,20 @@ function conbine_static_array(tree) {
 }
 
 // 函数执行的寻找，从该节点的父节点中寻找函数，并修改当前函数执行的节点
-function conbine_identy_function(tree) {
+function combine_identy_function(tree) {
+    var cache_name;
+    var cache_func;
+    var CACHE_FUNCS = {};
     estraverse.replace(tree, {
         enter(node, parent){
+            if (cache_name = _cache_func(node)){
+                CACHE_FUNCS[cache_name[0]] = cache_name[1];
+            }
+            if (cache_func = _cache_func_rep(node, CACHE_FUNCS)){
+                return cache_func;
+            }
+
+
             if (node.type === 'ExpressionStatement' &&
                 node.expression.type === 'CallExpression' && 
                 node.expression.callee.type === 'Identifier' &&
@@ -105,10 +166,11 @@ function conbine_identy_function(tree) {
             if (node.type === 'VariableDeclaration' && parent.body){
                 for(var jkey in node.declarations){
                     if (node.declarations[jkey].type === 'VariableDeclarator' && 
+                        node.declarations[jkey].init != null &&
                         node.declarations[jkey].init.type === 'CallExpression' &&
                         node.declarations[jkey].init.callee.type === 'Identifier' &&
                         parent.body){
-                        var _node = _catch_func_parent(parent, node.declarations[jkey].init.callee.name)
+                        var _node = _catch_func_parent(parent, node.declarations[jkey].init.callee.name);
                         if (_node){
                             node.declarations[jkey].init.callee = _node
                         }
@@ -144,9 +206,33 @@ function _catch_func_parent(parent, name) {
         }
     }
 }
+function _cache_func(node, name) {
+    if(node.type === 'VariableDeclaration'){
+        for(var jkey in node.declarations){
+            if (node.declarations[jkey].type === 'VariableDeclarator' && 
+                node.declarations[jkey].init.type === 'FunctionExpression' &&
+                node.declarations[jkey].id.type === 'Identifier'){
+                return [node.declarations[jkey].id.name, node.declarations[jkey].init]
+            }
+        }
+    }
+    if (node.type === 'FunctionDeclaration'){
+        if (node.id.type === 'Identifier'){
+            return [node.id.name, node]
+        }
+    }
+}
+function _cache_func_rep(node, cachefunc) {
+    if (node.type === 'CallExpression' && 
+        node.callee.type === 'Identifier' &&
+        node.callee.name in cachefunc){
+            node.callee = cachefunc[node.callee.name];
+            return node;
+        }
+}
 
 // 合并简单的二元运算
-function conbine_binary(tree) {
+function combine_binary(tree) {
     estraverse.replace(tree, {
         enter(node, parent){
             if (node.type === 'BinaryExpression' && node.left.type === 'Literal' && node.right.type === 'Literal') {
@@ -160,7 +246,7 @@ function conbine_binary(tree) {
 };
 
 // 合并简单二元运算的函数
-function conbine_binary_function(tree) {
+function combine_binary_function(tree) {
     estraverse.replace(tree, {
         enter(node, parent){
             if (node.type === 'CallExpression' && 
@@ -175,12 +261,20 @@ function conbine_binary_function(tree) {
                 node.callee.params[1].type === 'Identifier' &&
                 node.callee.body.body[0].argument.left.name  === node.callee.params[0].name &&
                 node.callee.body.body[0].argument.right.name === node.callee.params[1].name) {
-                return {
+                rnode = {
                     type: 'BinaryExpression',
                     operator: node.callee.body.body[0].argument.operator,
                     left: node.arguments[0],
                     right: node.arguments[1],
                 };
+                if (rnode.type === 'BinaryExpression' && rnode.left.type === 'Literal' && rnode.right.type === 'Literal') {
+                    return {
+                        type: 'Literal',
+                        value: eval(JSON.stringify(rnode.left.value) + rnode.operator + JSON.stringify(rnode.right.value))
+                    };
+                }else{
+                    return rnode
+                }
             }
         }
     });
