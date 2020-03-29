@@ -226,9 +226,9 @@ function _cache_func_rep(node, cachefunc) {
     if (node.type === 'CallExpression' && 
         node.callee.type === 'Identifier' &&
         node.callee.name in cachefunc){
-            node.callee = cachefunc[node.callee.name];
-            return node;
-        }
+        node.callee = cachefunc[node.callee.name];
+        return node;
+    }
 }
 
 // 合并简单的二元运算
