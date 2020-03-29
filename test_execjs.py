@@ -1,3 +1,9 @@
+filepath = '.'
+
+import os
+os.path.join(filepath, )
+mainjs = 
+
 with open('./test2.js', encoding='utf-8') as f:
     jscode = f.read()
 
