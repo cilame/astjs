@@ -32,13 +32,7 @@ print(s['cccc'](s['aaaa'],s['bbbb']) + s['123'])
 `
 
 var code = `
-function s1(a,b){
-    return a+b
-}
-function s2(a,b){
-    return a*b
-}
-s2(s1(1,3), s1(2,4))
+;var encode_version = 'sojson.v5', hiykl = '',  _0x323b=['wqjCsTPChD51w7I=','VikKw6DCmg==','wqoEwpzCqAXDjirDgMOe','w7LDrsKww5py','5Luz6IO95Yue6ZuGf8Kyw43DksKLWcKyEQA=','6L+e5pui5LiT5Lmk5Li557G/5YmCwqjDqOaTmOS+heOAnQ==','56ut6Za55oyS6aqi57q6wp7ig6HCnEfliZblrYfigY545ZG2w7Higa9Iw5bopLLlrrjigJLDq++8t+S/gOWOkOS+tuebhMKwwrEh44Cy','5aaF5p+l5oOM55ihwoo26YWH5bWS5aWP5Lukw7EAw63vva7CvcO4w4Lmo5TnrZ3vvpnnra7nrbXlhankupnpn7PCh8KSw6dHw7DDg3nDvTfCtOeZj+S6g+egie+9reiunuaMjeWOnuWFm+aesOWEm+WLiOWtlOOAlui+s+S5iuW3sOWHvuS7jOiDi+WIgeWuvVnCqcOl44Cdw6zDosKz56+p5qqc54mW5YW65a+E','w7HDs8KPXw==','K8OWw4nCpsOp','wp0zbMKrDsKf','QcKNwpBhdw=='];(function(_0x22d0bc,_0xc1d53e){var _0x2b009f=function(_0xa11c2c){while(--_0xa11c2c){_0x22d0bc['push'](_0x22d0bc['shift']());}};_0x2b009f(++_0xc1d53e);}(_0x323b,0xad));var _0x1691=function(_0x2ebb5f,_0x1c14f4){_0x2ebb5f=_0x2ebb5f-0x0;var _0x1245b7=_0x323b[_0x2ebb5f];if(_0x1691['initialized']===undefined){(function(){var _0x17acdf=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x52dfa6='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x17acdf['atob']||(_0x17acdf['atob']=function(_0x1c2b8d){var _0x59bbc9=String(_0x1c2b8d)['replace'](/=+$/,'');for(var _0x109150=0x0,_0x282401,_0x2cf9fe,_0x29a7a6=0x0,_0x143c34='';_0x2cf9fe=_0x59bbc9['charAt'](_0x29a7a6++);~_0x2cf9fe&&(_0x282401=_0x109150%0x4?_0x282401*0x40+_0x2cf9fe:_0x2cf9fe,_0x109150++%0x4)?_0x143c34+=String['fromCharCode'](0xff&_0x282401>>(-0x2*_0x109150&0x6)):0x0){_0x2cf9fe=_0x52dfa6['indexOf'](_0x2cf9fe);}return _0x143c34;});}());var _0x27ac57=function(_0x5d3ee8,_0x1c67bc){var _0x5d00a1=[],_0x57857c=0x0,_0x27586d,_0x5082b1='',_0x60c8f8='';_0x5d3ee8=atob(_0x5d3ee8);for(var _0x478fab=0x0,_0x2c1bee=_0x5d3ee8['length'];_0x478fab<_0x2c1bee;_0x478fab++){_0x60c8f8+='%'+('00'+_0x5d3ee8['charCodeAt'](_0x478fab)['toString'](0x10))['slice'](-0x2);}_0x5d3ee8=decodeURIComponent(_0x60c8f8);for(var _0x2a0777=0x0;_0x2a0777<0x100;_0x2a0777++){_0x5d00a1[_0x2a0777]=_0x2a0777;}for(_0x2a0777=0x0;_0x2a0777<0x100;_0x2a0777++){_0x57857c=(_0x57857c+_0x5d00a1[_0x2a0777]+_0x1c67bc['charCodeAt'](_0x2a0777%_0x1c67bc['length']))%0x100;_0x27586d=_0x5d00a1[_0x2a0777];_0x5d00a1[_0x2a0777]=_0x5d00a1[_0x57857c];_0x5d00a1[_0x57857c]=_0x27586d;}_0x2a0777=0x0;_0x57857c=0x0;for(var _0x4282d8=0x0;_0x4282d8<_0x5d3ee8['length'];_0x4282d8++){_0x2a0777=(_0x2a0777+0x1)%0x100;_0x57857c=(_0x57857c+_0x5d00a1[_0x2a0777])%0x100;_0x27586d=_0x5d00a1[_0x2a0777];_0x5d00a1[_0x2a0777]=_0x5d00a1[_0x57857c];_0x5d00a1[_0x57857c]=_0x27586d;_0x5082b1+=String['fromCharCode'](_0x5d3ee8['charCodeAt'](_0x4282d8)^_0x5d00a1[(_0x5d00a1[_0x2a0777]+_0x5d00a1[_0x57857c])%0x100]);}return _0x5082b1;};_0x1691['rc4']=_0x27ac57;_0x1691['data']={};_0x1691['initialized']=!![];}var _0x4b0681=_0x1691['data'][_0x2ebb5f];if(_0x4b0681===undefined){if(_0x1691['once']===undefined){_0x1691['once']=!![];}_0x1245b7=_0x1691['rc4'](_0x1245b7,_0x1c14f4);_0x1691['data'][_0x2ebb5f]=_0x1245b7;}else{_0x1245b7=_0x4b0681;}return _0x1245b7;};(function(_0x3b63ec,_0x3ade5f){var _0x44dc33={'TrVSx':_0x1691('0x0','xUV2'),'cgkGp':_0x1691('0x1','Saz0'),'QPnEZ':_0x1691('0x2','p1[!')};_0x3b63ec[_0x1691('0x3','@83L')]=_0x44dc33[_0x1691('0x4','OhPN')];_0x3ade5f[_0x1691('0x5','W9f@')]=_0x44dc33[_0x1691('0x6','iP1g')];_0x3ade5f[_0x1691('0x7','(fNo')]=_0x44dc33[_0x1691('0x8','p1[!')];}(window,document));;if(!(typeof encode_version!=='undefined'&&encode_version===_0x1691('0x9','zRQ)'))){window[_0x1691('0xa','#h7k')](_0x1691('0xb','$ff#'));};encode_version = 'sojson.v5';
 `
 
 var tree = esprima.parseScript(code)
@@ -184,6 +178,7 @@ function _catch_func(node, name) {
     if(node.type === 'VariableDeclaration'){
         for(var jkey in node.declarations){
             if (node.declarations[jkey].type === 'VariableDeclarator' && 
+                node.declarations[jkey].init != null &&
                 node.declarations[jkey].init.type === 'FunctionExpression' &&
                 node.declarations[jkey].id.type === 'Identifier' && 
                 node.declarations[jkey].id.name === name){
@@ -210,6 +205,7 @@ function _cache_func(node, name) {
     if(node.type === 'VariableDeclaration'){
         for(var jkey in node.declarations){
             if (node.declarations[jkey].type === 'VariableDeclarator' && 
+                node.declarations[jkey].init != null &&
                 node.declarations[jkey].init.type === 'FunctionExpression' &&
                 node.declarations[jkey].id.type === 'Identifier'){
                 return [node.declarations[jkey].id.name, node.declarations[jkey].init]
